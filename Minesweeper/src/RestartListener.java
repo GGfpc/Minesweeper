@@ -12,9 +12,7 @@ public class RestartListener implements ActionListener {
 	
 	
 	public void actionPerformed(ActionEvent e) {
-		game.addBombs();
-		
-		
+		game.init();
 	}
 
 }
