@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,6 +18,15 @@ public class Minesweeper {
 	private JPanel buttons;
 	private JPanel grid;
 	private JTextField score;
+	private boolean clickMode;
+	private ClickListener clickListener = new ClickListener(this);
+	private FlagListener flagListener = new FlagListener(this);
+	private JButton flag;
+	private JButton click;
+	
+	private int bombs;
+	private int flags;
+
 	private Cell[][] cells = new Cell[15][15];
 
 	public Minesweeper() {
@@ -25,22 +35,36 @@ public class Minesweeper {
 		buttons = new JPanel(new FlowLayout());
 		grid = new JPanel(new GridLayout(15, 15));
 
+		clickMode = true;
 		base.add(bg);
 		bg.add(buttons, BorderLayout.NORTH);
 		bg.add(grid, BorderLayout.CENTER);
 
 		score = new JTextField();
-		score.setText("Score");
+		score.setText("Click Mode");
+		score.setEditable(false);
 		buttons.add(score);
 
 		JButton tryAgain = new JButton("Try Again");
 		tryAgain.addActionListener(new RestartListener(this));
 		buttons.add(tryAgain);
 
+		click = new JButton("Click");
+		buttons.add(click);
+		click.addActionListener(new ClickButtonListener(this));
+
+		flag = new JButton("Flag");
+		buttons.add(flag);
+		flag.addActionListener(new FlagButtonListener(this));
+
 		base.setSize(720, 800);
 	}
 
 	public void init() {
+		click.setEnabled(false);
+		flag.setEnabled(true);
+		flags = 0;
+		bombs = 0;
 		grid.removeAll();
 		populateGrid();
 		addBombs();
@@ -49,10 +73,18 @@ public class Minesweeper {
 		base.setVisible(true);
 	}
 
+	public boolean getClickMode() {
+		return clickMode;
+	}
+
+	public void setClickMode(boolean clickMode) {
+		this.clickMode = clickMode;
+	}
+
 	public void populateGrid() {
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
-				Cell cell = new Cell(i, j, false, new ClickListener(this));
+				Cell cell = new Cell(i, j, false, clickListener, this);
 				cells[i][j] = cell;
 				cell.setBackground(Color.WHITE);
 				grid.add(cell);
@@ -73,11 +105,28 @@ public class Minesweeper {
 				if (mines != 0 && randInt % 7 == 0) {
 					cells[i][j].setIsBomb(true);
 					mines--;
+					bombs++;
 
 				}
 			}
 		}
 
+	}
+
+	public int getBombs() {
+		return bombs;
+	}
+
+	public void setBombs(int bombs) {
+		this.bombs = bombs;
+	}
+
+	public int getFlags() {
+		return flags;
+	}
+
+	public void setFlags(int flags) {
+		this.flags = flags;
 	}
 
 	public void revealNextCell(int x, int y) {
@@ -126,7 +175,6 @@ public class Minesweeper {
 
 		for (int i = 0; i < 15; i++) {
 			for (int j = 0; j < 15; j++) {
-
 				if (cells[i][j].IsBomb() == false) {
 					int bombCounter = 0;
 					for (int x = i - 1; x <= i + 1; x++) {
@@ -141,7 +189,6 @@ public class Minesweeper {
 						}
 					}
 					cells[i][j].setBombCount(bombCounter);
-					cells[i][j].setButtonValue(bombCounter);
 				}
 			}
 		}
@@ -158,6 +205,53 @@ public class Minesweeper {
 				cells[i][j].setText("");
 			}
 		}
+	}
+
+	public void win() {
+		if (flags == 30 && bombs == 0) {
+			for (int i = 0; i < 15; i++) {
+				for (int j = 0; j < 15; j++) {
+					cells[i][j].setText("");
+					cells[i][j].setForeground(Color.GREEN);
+					cells[i][j].setBackground(Color.GREEN);
+					cells[i][j].setEnabled(false);
+					score.setText("WIN!");
+					grid.validate();
+					grid.repaint();
+					score.repaint();
+				}
+			}
+		}
+	}
+
+	public void setClickListener() {
+		flag.setEnabled(true);
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				score.setText("Click Mode");
+				cells[i][j].removeActionListener(flagListener);
+				cells[i][j].addActionListener(clickListener);
+			}
+		}
+		click.setEnabled(false);
+		score.validate();
+		score.repaint();
+
+	}
+
+	public void setFlagListener() {
+		click.setEnabled(true);
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				score.setText("Flag Mode");
+				cells[i][j].removeActionListener(clickListener);
+				cells[i][j].addActionListener(flagListener);
+			}
+		}
+		flag.setEnabled(false);
+		score.validate();
+		score.repaint();
+
 	}
 
 }

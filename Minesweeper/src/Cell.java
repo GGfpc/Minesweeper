@@ -9,26 +9,54 @@ public class Cell extends JButton {
 	private int bombCount;
 	private boolean isBomb;
 	private boolean revealed;
+	private boolean flagged;
+	private Minesweeper game;
 
-	public Cell(int xPos, int yPos, boolean isBomb, ClickListener listener) {
+	public Cell(int xPos, int yPos, boolean isBomb, ClickListener listener, Minesweeper game) {
 		super();
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.isBomb = isBomb;
+		flagged = false;
 		addActionListener(listener);
+		this.game = game;
 	}
 
 	public void setRevealed(boolean revealed) {
 		this.revealed = revealed;
+		if(revealed){
+			setButtonValue();
+			if(isBomb){
+				setText("B");
+				setForeground(Color.BLACK);
+				validate();
+				repaint();
+			}
+		}
 	}
 	
 	
+	public boolean isFlagged() {
+		return flagged;
+	}
+
+	public void flag() {
+		this.flagged = true;
+		this.setText("F");
+		this.setBackground(Color.CYAN);
+		game.setFlags(game.getFlags() + 1);
+		
+	}
 	
+	public void unFlag() {
+		this.flagged = false;
+		setButtonValue();
+		this.setBackground(Color.WHITE);
+		game.setFlags(game.getFlags() - 1);
+	}
+
 	public void setIsBomb(Boolean b) {
 		isBomb = b;
-		if(isBomb){
-			setText("B");
-		}
 
 	}
 	
@@ -56,7 +84,7 @@ public class Cell extends JButton {
 		return bombCount;
 	}
 
-	public void setButtonValue(int bombCounter) {
+	public void setButtonValue() {
 
 		Color[] values = {new Color(0x32CD32), new Color(0xDAA520),
 			               new Color(0x8B0000), new Color(0x990000)};
@@ -70,5 +98,7 @@ public class Cell extends JButton {
 		}
 
 	}
+	
+	
 
 }

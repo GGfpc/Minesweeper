@@ -13,13 +13,17 @@ public class ClickListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Cell cell = (Cell) e.getSource();
 		
-		if(!((Cell)e.getSource()).IsBomb()){
+		if(!cell.IsBomb()){
 			game.revealNextCell(cell.getxPos(), cell.getyPos());
 			cell.setEnabled(false);
+		
 		}
 		else{
 			game.fail(cell);
+			
 		}
+		
+		game.getGrid().repaint();
 
 	}
 
