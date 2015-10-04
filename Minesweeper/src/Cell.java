@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
@@ -11,6 +12,7 @@ public class Cell extends JButton {
 	private boolean revealed;
 	private boolean flagged;
 	private Minesweeper game;
+	private ActionListener listener;
 
 	public Cell(int xPos, int yPos, boolean isBomb, ClickListener listener, Minesweeper game) {
 		super();
@@ -18,12 +20,14 @@ public class Cell extends JButton {
 		this.yPos = yPos;
 		this.isBomb = isBomb;
 		flagged = false;
+		this.listener = listener;
 		addActionListener(listener);
 		this.game = game;
 	}
 	
 	public void setRevealed(boolean revealed) {
 		this.revealed = revealed;
+		removeActionListener(listener);
 		if(revealed){
 			setButtonValue();
 			if(isBomb){
@@ -34,6 +38,7 @@ public class Cell extends JButton {
 			}
 		}
 	}
+	
 	
 	
 	public boolean isFlagged() {
@@ -92,7 +97,7 @@ public class Cell extends JButton {
 		for (int i = 0; i < values.length; i++) {
 			if (i + 1 == getBombCount() && bombCount > 0) {
 				setForeground(values[i]);
-				setText("" + getBombCount());
+				setText("<html>" + getBombCount() + "</html>");
 			}
 
 		}

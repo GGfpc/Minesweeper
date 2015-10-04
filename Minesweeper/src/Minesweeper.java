@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 public class Minesweeper {
 
@@ -144,12 +145,15 @@ public class Minesweeper {
 			} else {
 				cells[x][y].setRevealed(true);
 				cells[x][y].setBackground(Color.WHITE);
-				cells[x][y].setEnabled(false);
+				cells[x][y].setRolloverEnabled(false);
+			
 				
 				
 			}
 		}
 	}
+	
+	
 
 	private void reveal(int x, int y) {
 		revealNextCell(x - 1, y - 1);
@@ -257,5 +261,6 @@ public class Minesweeper {
 		score.repaint();
 
 	}
+	
 
 }

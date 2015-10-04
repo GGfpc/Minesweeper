@@ -16,7 +16,7 @@ public class ClickListener implements ActionListener {
 		
 		if(!cell.IsBomb()){
 			game.revealNextCell(cell.getxPos(), cell.getyPos());
-			cell.setEnabled(false);
+			cell.setRolloverEnabled(false);
 			cell.setBackground(Color.WHITE);
 		
 		}
