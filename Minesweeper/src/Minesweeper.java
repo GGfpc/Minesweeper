@@ -56,7 +56,6 @@ public class Minesweeper {
 		flag.addActionListener(new FlagButtonListener(this));
 
 		base.setSize(820, 900);
-		base.setResizable(false);
 	}
 
 	public void init() {
