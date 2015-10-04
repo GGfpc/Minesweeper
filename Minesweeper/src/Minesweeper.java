@@ -86,7 +86,7 @@ public class Minesweeper {
 			for (int j = 0; j < 15; j++) {
 				Cell cell = new Cell(i, j, false, clickListener, this);
 				cells[i][j] = cell;
-				cell.setBackground(Color.WHITE);
+				cell.setBackground(Color.GRAY);
 				grid.add(cell);
 			}
 		}
@@ -137,12 +137,16 @@ public class Minesweeper {
 		if (cells[x][y].getRevealed() == false) {
 			if (cells[x][y].getBombCount() == 0) {
 				cells[x][y].setRevealed(true);
-				cells[x][y].setBackground(Color.GREEN);
+				cells[x][y].setBackground(Color.WHITE);
+				cells[x][y].setEnabled(false);
 				reveal(x, y);
 
 			} else {
 				cells[x][y].setRevealed(true);
-				cells[x][y].setBackground(Color.BLUE);
+				cells[x][y].setBackground(Color.WHITE);
+				cells[x][y].setEnabled(false);
+				
+				
 			}
 		}
 	}

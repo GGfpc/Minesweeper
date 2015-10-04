@@ -21,7 +21,7 @@ public class Cell extends JButton {
 		addActionListener(listener);
 		this.game = game;
 	}
-
+	
 	public void setRevealed(boolean revealed) {
 		this.revealed = revealed;
 		if(revealed){

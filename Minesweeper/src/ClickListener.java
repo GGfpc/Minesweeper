@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,6 +17,7 @@ public class ClickListener implements ActionListener {
 		if(!cell.IsBomb()){
 			game.revealNextCell(cell.getxPos(), cell.getyPos());
 			cell.setEnabled(false);
+			cell.setBackground(Color.WHITE);
 		
 		}
 		else{
