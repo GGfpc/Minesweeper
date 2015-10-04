@@ -30,12 +30,11 @@ public class Cell extends JButton {
 		removeActionListener(listener);
 		if(revealed){
 			setButtonValue();
-			if(isBomb){
-				setText("B");
-				setForeground(Color.BLACK);
-				validate();
-				repaint();
+	
 			}
+		else{
+			setForeground(Color.GRAY);
+			setBackground(getForeground());
 		}
 	}
 	
@@ -49,15 +48,15 @@ public class Cell extends JButton {
 		this.flagged = true;
 		this.setText("F");
 		this.setBackground(Color.CYAN);
-		game.setFlags(game.getFlags() + 1);
+		
 		
 	}
 	
 	public void unFlag() {
 		this.flagged = false;
+		setText("");
 		setButtonValue();
-		this.setBackground(Color.WHITE);
-		game.setFlags(game.getFlags() - 1);
+		setRevealed(false);
 	}
 
 	public void setIsBomb(Boolean b) {

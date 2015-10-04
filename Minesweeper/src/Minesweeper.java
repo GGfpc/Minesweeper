@@ -24,10 +24,7 @@ public class Minesweeper {
 	private FlagListener flagListener = new FlagListener(this);
 	private JButton flag;
 	private JButton click;
-	
 	private int bombs;
-	private int flags;
-
 	private Cell[][] cells = new Cell[15][15];
 
 	public Minesweeper() {
@@ -58,14 +55,14 @@ public class Minesweeper {
 		buttons.add(flag);
 		flag.addActionListener(new FlagButtonListener(this));
 
-		base.setSize(720, 800);
+		base.setSize(820, 900);
+		base.setResizable(false);
 	}
 
 	public void init() {
+		bombs = 0;
 		click.setEnabled(false);
 		flag.setEnabled(true);
-		flags = 0;
-		bombs = 0;
 		grid.removeAll();
 		populateGrid();
 		addBombs();
@@ -105,29 +102,14 @@ public class Minesweeper {
 				int randInt = rand.nextInt();
 				if (mines != 0 && randInt % 7 == 0) {
 					cells[i][j].setIsBomb(true);
-					mines--;
+					cells[i][j].setText("B");
 					bombs++;
+					mines--;
 
 				}
 			}
 		}
 
-	}
-
-	public int getBombs() {
-		return bombs;
-	}
-
-	public void setBombs(int bombs) {
-		this.bombs = bombs;
-	}
-
-	public int getFlags() {
-		return flags;
-	}
-
-	public void setFlags(int flags) {
-		this.flags = flags;
 	}
 
 	public void revealNextCell(int x, int y) {
@@ -146,14 +128,10 @@ public class Minesweeper {
 				cells[x][y].setRevealed(true);
 				cells[x][y].setBackground(Color.WHITE);
 				cells[x][y].setRolloverEnabled(false);
-			
-				
-				
+
 			}
 		}
 	}
-	
-	
 
 	private void reveal(int x, int y) {
 		revealNextCell(x - 1, y - 1);
@@ -215,21 +193,38 @@ public class Minesweeper {
 		}
 	}
 
-	public void win() {
-		if (flags == 30 && bombs == 0) {
-			for (int i = 0; i < 15; i++) {
-				for (int j = 0; j < 15; j++) {
-					cells[i][j].setText("");
-					cells[i][j].setForeground(Color.GREEN);
-					cells[i][j].setBackground(Color.GREEN);
-					cells[i][j].setEnabled(false);
-					score.setText("WIN!");
-					grid.validate();
-					grid.repaint();
-					score.repaint();
+	public void checkWinStatus() {
+		int correct = 0;
+		int wrong = 0;
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				if (cells[i][j].IsBomb() && cells[i][j].isFlagged()) {
+					correct++;
+				}
+				if (!cells[i][j].IsBomb() && cells[i][j].isFlagged()) {
+					wrong++;
 				}
 			}
 		}
+		if (correct == bombs && wrong == 0) {
+			win();
+		}
+	}
+
+	private void win() {
+		for (int i = 0; i < 15; i++) {
+			for (int j = 0; j < 15; j++) {
+				cells[i][j].setText("");
+				cells[i][j].setForeground(Color.GREEN);
+				cells[i][j].setBackground(Color.GREEN);
+				cells[i][j].setEnabled(false);
+				score.setText("WIN!");
+				grid.validate();
+				grid.repaint();
+				score.repaint();
+			}
+		}
+
 	}
 
 	public void setClickListener() {
@@ -261,6 +256,5 @@ public class Minesweeper {
 		score.repaint();
 
 	}
-	
 
 }

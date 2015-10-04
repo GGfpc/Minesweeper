@@ -16,17 +16,13 @@ public class FlagListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Cell cell = (Cell) e.getSource();
-		
 		if(!cell.isFlagged()){
 			cell.flag();
-			if(cell.IsBomb()){
-				game.setBombs(game.getBombs() - 1);
-			}
 		}
 		else{	
 			cell.unFlag();
 		}
-		game.win();
+		game.checkWinStatus();
 		game.getGrid().repaint();
 		
 	}
