@@ -102,7 +102,6 @@ public class Minesweeper {
 				int randInt = rand.nextInt();
 				if (mines != 0 && randInt % 7 == 0) {
 					cells[i][j].setIsBomb(true);
-					cells[i][j].setText("B");
 					bombs++;
 					mines--;
 
